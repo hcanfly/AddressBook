@@ -53,6 +53,13 @@ class ContactDetailState extends State<ContactDetail> {
 
   @override
   void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _mobilePhoneController.dispose();
+    _addressController.dispose();
+    _emailController.dispose();
+    _notesController.dispose();
+
     _nameFocus.dispose();
     _phoneFocus.dispose();
     _mobilePhoneFocus.dispose();
