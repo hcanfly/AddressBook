@@ -52,6 +52,16 @@ class ContactDetailState extends State<ContactDetail> {
   }
 
   @override
+  void dispose() {
+    _nameFocus.dispose();
+    _phoneFocus.dispose();
+    _mobilePhoneFocus.dispose();
+    _emailFocus.dispose();
+    _addressFocus.dispose();
+    _notesFocus.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     TextStyle textStyle = Theme.of(context).textTheme.title;
 
