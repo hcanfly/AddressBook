@@ -1,16 +1,13 @@
 # address_book
 
-A new Flutter project.
+AddressBook is a Flutter sample app. It uses MySQL1 to store the data, so a MySQL database is required. The app is a standard Master / Detail application. The Master page is a listview that displays the contacts. The Detail page is a Form that allows creating or editing a contact, with validation. The TextFormFields use a number of the different options available for them.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+|![Screenshot](ListPage.jpeg)
+|![Screenshot](DetailPage.jpeg)
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## License
+
+address_book is licensed under the MIT License. See the LICENSE file for more information, but basically this is sample code and you can do whatever you want with it.
