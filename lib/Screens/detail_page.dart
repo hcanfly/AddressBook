@@ -66,6 +66,8 @@ class ContactDetailState extends State<ContactDetail> {
     _emailFocus.dispose();
     _addressFocus.dispose();
     _notesFocus.dispose();
+    
+    super.dispose();
   }
 
   @override
