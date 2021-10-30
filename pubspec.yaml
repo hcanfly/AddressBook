@@ -15,8 +15,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.15.7
-  mysql1: ^0.16.3
+  intl: ^0.17.0
+  mysql1: ^0.19.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -26,13 +26,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

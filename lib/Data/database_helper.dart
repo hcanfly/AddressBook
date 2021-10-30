@@ -2,8 +2,6 @@ import 'dart:async';
 import 'Model.dart';
 import 'package:mysql1/mysql1.dart';
 
-
-
 class DatabaseHelper {
   static DatabaseHelper _databaseHelper;
   static MySqlConnection _databaseConnection;
@@ -19,19 +17,15 @@ class DatabaseHelper {
 
   Future<MySqlConnection> get databaseConnection async {
     try {
-      var host = '<user data>';   //e.g. 196.70.125.43
-      var user = '<user data>';
-      var db = '<user data>';
-      var password = '<user data>';
+      var host = '<ip address>'; //e.g. 196.70.125.43
+      var user = '<user name>';
+      var db = '<db name>';
+      var password = '';
 
-      assert(host != '<user data>');
+      assert(host != '<ip address>');
 
       _databaseConnection = await MySqlConnection.connect(ConnectionSettings(
-          host: host,
-          port: 3306,
-          user: user,
-          db: db,
-          password: password));
+          host: host, port: 3306, user: user, db: db, password: password));
     } catch (e) {
       print(e.toString());
       rethrow;
@@ -99,7 +93,7 @@ class DatabaseHelper {
   Future<List<Contact>> getContactsList() async {
     MySqlConnection connection = await this.databaseConnection;
 
-    List<Contact> listResults = List();
+    List<Contact> listResults = [];
 
     if (connection != null) {
       Results results = await connection.query(

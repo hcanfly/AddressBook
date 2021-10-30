@@ -21,6 +21,7 @@ class ContactDetailState extends State<ContactDetail> {
   Contact _contact;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  // use controllers to bind fields to value passed in
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _mobilePhoneController = TextEditingController();
@@ -28,19 +29,11 @@ class ContactDetailState extends State<ContactDetail> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
 
-  final FocusNode _nameFocus = FocusNode();
-  final FocusNode _phoneFocus = FocusNode();
-  final FocusNode _mobilePhoneFocus = FocusNode();
-  final FocusNode _emailFocus = FocusNode();
-  final FocusNode _addressFocus = FocusNode();
-  final FocusNode _notesFocus = FocusNode();
-
   ContactDetailState(this._contact, this._appBarTitle);
 
   @override
   void initState() {
     super.initState();
-
     if (_appBarTitle == "Edit Contact") {
       _nameController.text = _contact.name;
       _phoneController.text = _contact.homePhone;
@@ -60,24 +53,18 @@ class ContactDetailState extends State<ContactDetail> {
     _emailController.dispose();
     _notesController.dispose();
 
-    _nameFocus.dispose();
-    _phoneFocus.dispose();
-    _mobilePhoneFocus.dispose();
-    _emailFocus.dispose();
-    _addressFocus.dispose();
-    _notesFocus.dispose();
-    
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = Theme.of(context).textTheme.title;
+    TextStyle textStyle = Theme.of(context).textTheme.subtitle1;
 
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
         // For when user presses Back navigation button in device navigationBar (Android)
         _returnToHomePage(false);
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -102,7 +89,6 @@ class ContactDetailState extends State<ContactDetail> {
                 padding: const EdgeInsets.only(left: 4.0, right: 4.0),
                 child: ListView(
                   children: <Widget>[
-                    // Name
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 30.0, bottom: 15.0, left: 6.0, right: 6.0),
@@ -110,24 +96,16 @@ class ContactDetailState extends State<ContactDetail> {
                         controller: _nameController,
                         autocorrect: false,
                         textInputAction: TextInputAction.next,
-                        focusNode: _nameFocus,
                         enabled: (_appBarTitle ==
                             'Add Contact'), // name is the key. can't change it. must delete and re-create.
-                        onFieldSubmitted: (term) {
-                          _nameFocus.unfocus();
-                          FocusScope.of(context).requestFocus(_phoneFocus);
-                        },
-                        onSaved: (String value) {
-                          print("OnSaved: $value");
-                          _contact.name = value;
-                        },
                         validator: (String value) {
-                          _contact.name = _nameController.text;
                           if (value.isEmpty) {
                             return 'Gotta have a name';
                           } else if (value.length > 79) {
                             return 'Name must be less than 80 characters';
                           }
+                          _contact.name = _nameController.text;
+                          return null;
                         },
                         style: textStyle,
                         decoration: _inputDecoration(textStyle, "Name"),
@@ -145,21 +123,15 @@ class ContactDetailState extends State<ContactDetail> {
                                 const EdgeInsets.only(bottom: 15.0, left: 6.0),
                             child: TextFormField(
                               controller: _phoneController,
-                              //keyboardType: TextInputType.number,
                               autocorrect: false,
                               textInputAction: TextInputAction.next,
-                              focusNode: _phoneFocus,
-                              onFieldSubmitted: (term) {
-                                _phoneFocus.unfocus();
-                                FocusScope.of(context)
-                                    .requestFocus(_mobilePhoneFocus);
-                              },
                               style: textStyle,
                               validator: (String value) {
-                                _contact.homePhone = _phoneController.text;
                                 if (value.length > 29) {
-                                  return "Phone numbers must be less than 30 characters";
+                                  return "Phone too long";
                                 }
+                                _contact.homePhone = _phoneController.text;
+                                return null;
                               },
                               decoration:
                                   _inputDecoration(textStyle, "Home Phone"),
@@ -174,22 +146,16 @@ class ContactDetailState extends State<ContactDetail> {
                                 const EdgeInsets.only(bottom: 15.0, right: 6.0),
                             child: TextFormField(
                               controller: _mobilePhoneController,
-                              //keyboardType: TextInputType.phone,
                               autocorrect: false,
                               textInputAction: TextInputAction.next,
-                              focusNode: _mobilePhoneFocus,
-                              onFieldSubmitted: (term) {
-                                _mobilePhoneFocus.unfocus();
-                                FocusScope.of(context)
-                                    .requestFocus(_emailFocus);
-                              },
                               style: textStyle,
                               validator: (String value) {
+                                if (value.length > 29) {
+                                  return "Phone too long";
+                                }
                                 _contact.mobilePhone =
                                     _mobilePhoneController.text;
-                                if (value.length > 29) {
-                                  return "Phone numbers must be less than 30 characters";
-                                }
+                                return null;
                               },
                               decoration:
                                   _inputDecoration(textStyle, "Mobile Phone"),
@@ -207,16 +173,12 @@ class ContactDetailState extends State<ContactDetail> {
                         keyboardType: TextInputType.emailAddress,
                         autocorrect: false,
                         textInputAction: TextInputAction.next,
-                        focusNode: _emailFocus,
-                        onFieldSubmitted: (term) {
-                          _emailFocus.unfocus();
-                          FocusScope.of(context).requestFocus(_addressFocus);
-                        },
                         validator: (String value) {
-                          _contact.email = _emailController.text;
                           if (value.length > 59) {
                             return 'Email must be less than 60 characters';
                           }
+                          _contact.email = _emailController.text;
+                          return null;
                         },
                         style: textStyle,
                         decoration: _inputDecoration(textStyle, "Email"),
@@ -231,16 +193,12 @@ class ContactDetailState extends State<ContactDetail> {
                         autocorrect: false,
                         maxLines: 3,
                         textInputAction: TextInputAction.newline,
-                        focusNode: _addressFocus,
-                        onEditingComplete: () {
-                          _addressFocus.unfocus();
-                          FocusScope.of(context).requestFocus(_notesFocus);
-                        },
                         validator: (String value) {
-                          _contact.address = _addressController.text;
                           if (value.length > 254) {
                             return 'Address must be less than 255 characters';
                           }
+                          _contact.address = _addressController.text;
+                          return null;
                         },
                         style: textStyle,
                         decoration: _inputDecoration(textStyle, "Address"),
@@ -255,16 +213,12 @@ class ContactDetailState extends State<ContactDetail> {
                         autocorrect: false,
                         maxLines: 3,
                         textInputAction: TextInputAction.newline,
-                        focusNode: _notesFocus,
-                        onFieldSubmitted: (term) {
-                          _notesFocus.unfocus();
-                          //FocusScope.of(context).requestFocus(_nameFocus);
-                        },
                         validator: (String value) {
-                          _contact.notes = _notesController.text;
                           if (value.length > 254) {
                             return 'Notes must be less than 255 characters';
                           }
+                          _contact.notes = _notesController.text;
+                          return null;
                         },
                         style: textStyle,
                         decoration: _inputDecoration(textStyle, "Notes"),
@@ -272,12 +226,8 @@ class ContactDetailState extends State<ContactDetail> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 40.0, right: 40.0),
-                      child: RaisedButton(
-                        color: Theme.of(context).accentColor,
-                        textColor: Theme.of(context).primaryColorDark,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                        child: Text(
+                      child: ElevatedButton(
+                        child: const Text(
                           'Save',
                           textScaleFactor: 1.5,
                         ),
@@ -329,7 +279,7 @@ class ContactDetailState extends State<ContactDetail> {
   }
 
   void _returnToHomePage(bool refreshListDisplay) {
-    Navigator.pop(context, refreshListDisplay);
+    Navigator.of(context).pop(refreshListDisplay);
   }
 }
 

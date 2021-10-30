@@ -19,7 +19,7 @@ class ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     if (_contactList == null) {
-      _contactList = List<Contact>();
+      _contactList = [];
       _updateListView();
     }
 
@@ -90,7 +90,8 @@ class ListPageState extends State<ListPage> {
 
   void _showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(message));
-    Scaffold.of(context).showSnackBar(snackBar);
+    //Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void _showDetailPage(Contact contact, String title) async {
@@ -113,8 +114,8 @@ class ListPageState extends State<ListPage> {
       });
     }).catchError((e) {
       print(e.toString());
-      showAlertDialog(context, "Database error", e.toString()); // this is for me, so showing actual exception. suggest something more user-friendly in a real app.
+      showAlertDialog(context, "Database error",
+          e.toString()); // this is for me, so showing actual exception. suggest something more user-friendly in a real app.
     });
   }
-
 }
